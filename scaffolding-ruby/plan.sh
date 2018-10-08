@@ -10,6 +10,7 @@ pkg_build_deps=(core/coreutils core/sed)
 pkg_bin_dirs=(bin)
 
 do_prepare() {
+  echo "MRA do_prepare"
   GEM_HOME="$(pkg_path_for bundler)"
   build_line "Setting GEM_HOME=$GEM_HOME"
   GEM_PATH="$GEM_HOME"
