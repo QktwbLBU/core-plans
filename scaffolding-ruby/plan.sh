@@ -1,5 +1,5 @@
 pkg_name=scaffolding-ruby
-pkg_origin=core
+pkg_origin=qktwblbu
 pkg_version="0.8.10"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
