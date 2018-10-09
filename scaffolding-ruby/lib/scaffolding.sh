@@ -1,4 +1,4 @@
- shellcheck shell=bash disable=SC2086
+# shellcheck shell=bash disable=SC2086
 
 scaffolding_load() {
   _setup_funcs
@@ -137,8 +137,6 @@ _RAILS_
       ;;
   esac
 
-  attach
-
   if [[ "${_uses_pg:-}" == "true" ]]; then
       cat <<_PG_
 
@@ -246,7 +244,7 @@ scaffolding_setup_app_config() {
   t="$CACHE_PATH/default.scaffolding.toml"
 
   echo "" >> "$t"
-echo "MRA 0" ; cat "$t"
+
   if _default_toml_has_no secret_key_base \
       && [[ -v "scaffolding_env[SECRET_KEY_BASE]" ]]; then
     { echo "# Rails' secret key base is required and must be non-empty"
@@ -256,24 +254,19 @@ echo "MRA 0" ; cat "$t"
       echo ""
     } >> "$t"
   fi
-echo "MRA 1" ; cat "$t"
-attach
 
   if _default_toml_has_no lang; then
     echo 'lang = "en_US.UTF-8"' >> "$t"
   fi
-echo "MRA 2" ; cat "$t"
 
   if _default_toml_has_no rack_env \
       && [[ -v "scaffolding_env[RACK_ENV]" ]]; then
     echo 'rack_env = "production"' >> "$t"
   fi
-echo "MRA 3" ; cat "$t"
   if _default_toml_has_no rails_env \
       && [[ -v "scaffolding_env[RAILS_ENV]" ]]; then
     echo 'rails_env = "production"' >> "$t"
   fi
-echo "MRA 4" ; cat "$t"
 
   if _default_toml_has_no app; then
     echo "" >> "$t"
@@ -282,7 +275,6 @@ echo "MRA 4" ; cat "$t"
       echo "port = $scaffolding_app_port" >> "$t"
     fi
   fi
-echo "MRA 5" ; cat "$t"
 }
 
 scaffolding_setup_database_config() {
@@ -401,8 +393,6 @@ scaffolding_run_assets_precompile() {
 
   if _has_gem rake && _has_rakefile; then
     pushd "$scaffolding_app_prefix" > /dev/null
-    echo "MRA $scaffolding_app_prefix"
-    attach
     if _rake -P --trace | grep -q '^rake assets:precompile$'; then
       build_line "Detected and running Rake 'assets:precompile'"
       export DATABASE_URL=${DATABASE_URL:-"postgresql://nobody@nowhere/fake_db_to_appease_rails_env"}
@@ -602,8 +592,6 @@ _update_vars() {
       _set_if_unset scaffolding_env RACK_ENV "{{cfg.rack_env}}"
       ;;
   esac
-
-  attach
 
   if _has_gem activerecord && _compare_gem activerecord \
       --less-than 4.1.0.beta1; then
@@ -855,10 +843,9 @@ _bundle() {
 }
 
 _rake() {
-  echo "MRA _rake"
-  printenv
   case "$_app_type" in
     rails*)
+      SECRET_KEY_BASE=1 \
       RACK_ENV=production \
         RAILS_ENV=production \
         RAILS_GROUP=assets \
@@ -937,7 +924,6 @@ EOF
 _default_toml_has_no() {
   local key toml
   key="$1"
-attach
   toml="$PLAN_CONTEXT/default.toml"
 
   if [[ ! -f "$toml" ]]; then
