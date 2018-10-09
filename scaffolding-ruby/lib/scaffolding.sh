@@ -246,7 +246,7 @@ scaffolding_setup_app_config() {
   t="$CACHE_PATH/default.scaffolding.toml"
 
   echo "" >> "$t"
-
+echo "MRA 0" ; cat "$t"
   if _default_toml_has_no secret_key_base \
       && [[ -v "scaffolding_env[SECRET_KEY_BASE]" ]]; then
     { echo "# Rails' secret key base is required and must be non-empty"
@@ -256,19 +256,23 @@ scaffolding_setup_app_config() {
       echo ""
     } >> "$t"
   fi
+echo "MRA 1" ; cat "$t"
 
   if _default_toml_has_no lang; then
     echo 'lang = "en_US.UTF-8"' >> "$t"
   fi
+echo "MRA 2" ; cat "$t"
 
   if _default_toml_has_no rack_env \
       && [[ -v "scaffolding_env[RACK_ENV]" ]]; then
     echo 'rack_env = "production"' >> "$t"
   fi
+echo "MRA 3" ; cat "$t"
   if _default_toml_has_no rails_env \
       && [[ -v "scaffolding_env[RAILS_ENV]" ]]; then
     echo 'rails_env = "production"' >> "$t"
   fi
+echo "MRA 4" ; cat "$t"
 
   if _default_toml_has_no app; then
     echo "" >> "$t"
@@ -277,7 +281,7 @@ scaffolding_setup_app_config() {
       echo "port = $scaffolding_app_port" >> "$t"
     fi
   fi
-  attach
+echo "MRA 5" ; cat "$t"
 }
 
 scaffolding_setup_database_config() {
