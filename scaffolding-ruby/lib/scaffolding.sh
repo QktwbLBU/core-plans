@@ -137,6 +137,8 @@ _RAILS_
       ;;
   esac
 
+  attach
+
   if [[ "${_uses_pg:-}" == "true" ]]; then
       cat <<_PG_
 
@@ -275,6 +277,7 @@ scaffolding_setup_app_config() {
       echo "port = $scaffolding_app_port" >> "$t"
     fi
   fi
+  attach
 }
 
 scaffolding_setup_database_config() {
@@ -594,6 +597,8 @@ _update_vars() {
       _set_if_unset scaffolding_env RACK_ENV "{{cfg.rack_env}}"
       ;;
   esac
+
+  attach
 
   if _has_gem activerecord && _compare_gem activerecord \
       --less-than 4.1.0.beta1; then
