@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2086
+ shellcheck shell=bash disable=SC2086
 
 scaffolding_load() {
   _setup_funcs
@@ -257,6 +257,7 @@ echo "MRA 0" ; cat "$t"
     } >> "$t"
   fi
 echo "MRA 1" ; cat "$t"
+attach
 
   if _default_toml_has_no lang; then
     echo 'lang = "en_US.UTF-8"' >> "$t"
@@ -854,6 +855,8 @@ _bundle() {
 }
 
 _rake() {
+  echo "MRA _rake"
+  printenv
   case "$_app_type" in
     rails*)
       RACK_ENV=production \
@@ -934,6 +937,7 @@ EOF
 _default_toml_has_no() {
   local key toml
   key="$1"
+attach
   toml="$PLAN_CONTEXT/default.toml"
 
   if [[ ! -f "$toml" ]]; then
